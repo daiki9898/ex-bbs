@@ -57,7 +57,7 @@ public class ArticleRepository {
     };
 
     /**
-     * 記事をDBに挿入する.
+     * 記事情報をDBに挿入する.
      *
      * @param article 記事
      */
@@ -79,7 +79,7 @@ public class ArticleRepository {
                  FROM articles as a
                  INNER JOIN comments as c
                  ON a.id = c.article_id
-                 ORDER BY a.id DESC;
+                 ORDER BY a.id DESC, c.id DESC;
                 """;
         return template.query(sql, ARTICLE_RESULT_SET_EXTRACTOR);
     }

@@ -15,25 +15,31 @@
     <div class="container">
       <!-- 記事投稿フォーム -->
       <form
-        th:action="@{/post-artice}"
+        th:action="@{/post-article}"
         method="post"
         th:object="${articleForm}"
       >
         <div class="row">
-          <label for="name" class="col-auto col-form-label">投稿者名：</label>
+          <label th:for="*{name}" class="col-auto col-form-label"
+            >投稿者名：</label
+          >
           <div class="col-auto">
             <input type="text" class="form-control" th:field="*{name}" />
           </div>
         </div>
         <div>
-          <label for="content" class="form-label">投稿内容：</label>
+          <label th:for="*{content}" class="form-label">投稿内容：</label>
           <textarea class="form-control" th:field="*{content}"></textarea>
         </div>
         <button class="btn btn-secondary mt-3">記事投稿</button>
       </form>
       <hr />
       <!-- 記事エリア -->
-      <div th:each="article : ${articles}" th:object="${article}">
+      <div
+        th:each="article : ${articles}"
+        th:object="${article}"
+        class="border border-primary rounded p-3 mb-3"
+      >
         <div th:text="'投稿者名：' + *{name}"></div>
         <div>投稿内容：</div>
         <pre th:text="*{content}"></pre>
@@ -41,30 +47,36 @@
           >記事削除</a
         >
         <!-- コメントエリア -->
-        <div th:each="comment : *{comments}" th:object="${comment}">
+        <div
+          th:each="comment : *{comments}"
+          th:object="${comment}"
+          class="border border-secondary rounded p-2 mb-2"
+        >
           <div th:text="'投稿者名：' + *{name}"></div>
           <div>投稿内容：</div>
           <pre th:text="*{content}"></pre>
         </div>
-      </div>
-      <!-- コメント投稿フォーム -->
-      <form
-        th:action="@{/post-comment}"
-        method="post"
-        th:object="${commentForm}"
-      >
-        <div class="row">
-          <label for="name" class="col-auto col-form-label">名前：</label>
-          <div class="col-auto">
-            <input type="text" class="form-control" th:field="*{name}" />
+        <!-- コメント投稿フォーム -->
+        <form
+          th:action="@{/post-comment}"
+          method="post"
+          th:object="${commentForm}"
+        >
+          <div class="row">
+            <label th:for="*{name}" class="col-auto col-form-label"
+              >名前：</label
+            >
+            <div class="col-auto">
+              <input type="text" class="form-control" th:field="*{name}" />
+            </div>
           </div>
-        </div>
-        <div>
-          <label for="content" class="form-label">コメント：</label>
-          <textarea class="form-control" th:field="*{content}"></textarea>
-        </div>
-        <button class="btn btn-secondary mt-3">コメント投稿</button>
-      </form>
+          <div>
+            <label th:for="*{content}" class="form-label">コメント：</label>
+            <textarea class="form-control" th:field="*{content}"></textarea>
+          </div>
+          <button class="btn btn-secondary mt-3">コメント投稿</button>
+        </form>
+      </div>
     </div>
 
     <!-- bootstrap js -->
