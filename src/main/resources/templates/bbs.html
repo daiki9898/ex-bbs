@@ -50,7 +50,7 @@
         <div>投稿内容：</div>
         <pre th:text="${article.content}"></pre>
         <a
-          th:href="@{/delete-article/} + *{id}"
+          th:href="@{/delete-article/} + ${article.id}"
           class="btn btn-danger mb-2"
           role="button"
           >記事削除</a
