@@ -35,7 +35,6 @@ public class ArticleController {
      */
     @GetMapping
     public String index(ArticleForm articleForm, CommentForm commentForm, Model model) {
-        articleService.findAll().forEach(System.out::println);
         model.addAttribute("articles", articleService.findAll());
         return "bbs";
     }
@@ -88,9 +87,8 @@ public class ArticleController {
     @PostMapping("/post-comment")
     public String postComment(@Validated CommentForm commentForm, BindingResult bindingResult,
                               ArticleForm articleForm, Model model) {
-        System.out.println(commentForm);
         if (bindingResult.hasErrors()) {
-            System.out.println("エラー");
+            model.addAttribute("targetArticleId", commentForm.getArticleId());
             return index(articleForm, commentForm, model);
         }
         Comment comment = new Comment();

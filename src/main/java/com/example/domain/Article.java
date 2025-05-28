@@ -19,9 +19,9 @@ public class Article {
      * */
     private Integer id;
     /** 投稿者名 */
-    private String name;
+    private String articleName;
     /** 投稿内容 */
-    private String content;
+    private String articleContent;
     /** コメント一覧 */
     private List<Comment> comments;
 }

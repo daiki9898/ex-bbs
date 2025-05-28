@@ -15,27 +15,30 @@
     <div class="container">
       <!-- 記事投稿フォーム -->
       <form th:action="@{/post-article}" method="post">
+        <!-- 投稿者名 -->
         <div class="row">
-          <div th:errors="${articleForm.name}" class="text-danger"></div>
-          <label th:for="${articleForm.name}" class="col-auto col-form-label"
+          <div th:errors="${articleForm.articleName}" class="text-danger"></div>
+          <label for="articleName" class="col-auto col-form-label"
             >投稿者名：</label
           >
           <div class="col-auto">
             <input
               type="text"
               class="form-control"
-              th:field="${articleForm.name}"
+              th:field="${articleForm.articleName}"
             />
           </div>
         </div>
+        <!-- 投稿内容 -->
         <div>
-          <div th:errors="${articleForm.content}" class="text-danger"></div>
-          <label th:for="${articleForm.content}" class="form-label"
-            >投稿内容：</label
-          >
+          <div
+            th:errors="${articleForm.articleContent}"
+            class="text-danger"
+          ></div>
+          <label for="articleContent" class="form-label">投稿内容：</label>
           <textarea
             class="form-control"
-            th:field="${articleForm.content}"
+            th:field="${articleForm.articleContent}"
           ></textarea>
         </div>
         <button class="btn btn-secondary mt-3" type="submit">記事投稿</button>
@@ -43,12 +46,12 @@
       <hr />
       <!-- 記事エリア -->
       <div
-        th:each="article : ${articles}"
+        th:each="article,status : ${articles}"
         class="border border-primary rounded p-3 mb-3"
       >
-        <div th:text="'投稿者名：' + ${article.name}"></div>
+        <div th:text="'投稿者名：' + ${article.articleName}"></div>
         <div>投稿内容：</div>
-        <pre th:text="${article.content}"></pre>
+        <pre th:text="${article.articleContent}"></pre>
         <a
           th:href="@{/delete-article/} + ${article.id}"
           class="btn btn-danger mb-2"
@@ -60,34 +63,85 @@
           th:each="comment : ${article.comments}"
           class="border border-secondary rounded p-2 mb-2"
         >
-          <div th:text="'投稿者名：' + ${comment.name}"></div>
+          <div th:text="'投稿者名：' + ${comment.commentName}"></div>
           <div>投稿内容：</div>
-          <pre th:text="${comment.content}"></pre>
+          <pre th:text="${comment.commentContent}"></pre>
         </div>
         <!-- コメント投稿フォーム -->
         <form th:action="@{/post-comment}" method="post">
+          <!-- 名前 -->
           <div class="row">
-            <div th:errors="${commentForm.name}" class="text-danger"></div>
-            <label th:for="${commentForm.name}" class="col-auto col-form-label"
-              >名前：</label
-            >
-            <div class="col-auto">
-              <input
-                type="text"
-                class="form-control"
-                th:field="${commentForm.name}"
-              />
+            <div
+              th:if="${targetArticleId} == ${article.id}"
+              th:errors="${commentForm.commentName}"
+              class="text-danger"
+            ></div>
+            <!-- エラーが出て戻された場合 -->
+            <div th:if="${targetArticleId} == ${article.id}">
+              <label
+                th:for="'commentName' + ${status.count}"
+                class="col-auto col-form-label"
+                >名前：</label
+              >
+              <div class="col-auto">
+                <input
+                  type="text"
+                  class="form-control"
+                  th:id="'commentName' + ${status.count}"
+                  th:field="${commentForm.commentName}"
+                />
+              </div>
+            </div>
+            <!-- 通常時 -->
+            <div th:unless="${targetArticleId} == ${article.id}">
+              <label
+                th:for="'commentName' + ${status.count}"
+                class="col-auto col-form-label"
+                >名前：</label
+              >
+              <div class="col-auto">
+                <input
+                  type="text"
+                  class="form-control"
+                  th:id="'commentName' + ${status.count}"
+                  name="commentName"
+                />
+              </div>
             </div>
           </div>
+          <!-- コメント内容 -->
           <div>
-            <div th:errors="${commentForm.content}" class="text-danger"></div>
-            <label th:for="${commentForm.content}" class="form-label"
-              >コメント：</label
-            >
-            <textarea
-              class="form-control"
-              th:field="${commentForm.content}"
-            ></textarea>
+            <div
+              th:if="${targetArticleId} == ${article.id}"
+              th:errors="${commentForm.commentContent}"
+              class="text-danger"
+            ></div>
+            <!-- エラーが出て戻された場合 -->
+            <div th:if="${targetArticleId} == ${article.id}">
+              <label
+                th:for="'commentContent' + ${status.count}"
+                class="form-label"
+                >コメント：</label
+              >
+              <textarea
+                class="form-control"
+                th:id="'commnetContent' + ${status.count}"
+                th:field="${commentForm.commentContent}"
+              ></textarea>
+            </div>
+            <!-- 通常時 -->
+            <div th:unless="${targetArticleId} == ${article.id}">
+              <label
+                th:for="'commentContent' + ${status.count}"
+                class="form-label"
+                >コメント：</label
+              >
+              <textarea
+                class="form-control"
+                th:id="'commnetContent' + ${status.count}"
+                name="commentContent"
+              ></textarea>
+            </div>
           </div>
           <input
             type="hidden"
@@ -95,7 +149,11 @@
             id="articleId"
             th:value="${article.id}"
           />
-          <div th:errors="${commentForm.articleId}" class="text-danger"></div>
+          <div
+            th:if="${targetArticleId} == ${article.id}"
+            th:errors="${commentForm.articleId}"
+            class="text-danger"
+          ></div>
           <button class="btn btn-secondary mt-3">コメント投稿</button>
         </form>
       </div>

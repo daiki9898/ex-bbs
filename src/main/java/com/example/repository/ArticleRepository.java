@@ -32,14 +32,14 @@ public class ArticleRepository {
 
         while (rs.next()) {
             Integer articleId = rs.getInt("a_id");
-            Article article = articleMap.get(rs.getInt("a_id"));
+            Article article = articleMap.get(articleId);
             // マップに記事が入っていない場合
             if (article == null) {
                 // 記事の作成
                 article = Article.builder()
                         .id(rs.getInt("a_id"))
-                        .name(rs.getString("a_name"))
-                        .content(rs.getString("a_content"))
+                        .articleName(rs.getString("a_name"))
+                        .articleContent(rs.getString("a_content"))
                         .comments(new ArrayList<>())
                         .build();
                 // 新しく記事を入れる.
@@ -50,8 +50,8 @@ public class ArticleRepository {
                 // コメントの作成
                 Comment comment = Comment.builder()
                         .id(rs.getInt("c_id"))
-                        .name(rs.getString("c_name"))
-                        .content(rs.getString("c_content"))
+                        .commentName(rs.getString("c_name"))
+                        .commentContent(rs.getString("c_content"))
                         .articleId(rs.getInt("c_article_id"))
                         .build();
                 // 記事にコメントを追加していく.
@@ -69,7 +69,7 @@ public class ArticleRepository {
      */
     public void save(Article article) {
         SqlParameterSource param = new BeanPropertySqlParameterSource(article);
-        String sql = "INSERT INTO articles (name, content) VALUES (:name, :content)";
+        String sql = "INSERT INTO articles (name, content) VALUES (:articleName, :articleContent)";
         template.update(sql, param);
     }
 
