@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * 記事情報を操作するサービス.
+ * 記事を操作するサービス.
  */
 @Service
 @Transactional
@@ -18,7 +18,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
 
     /**
-     * 記事情報を保存する.
+     * 記事を保存する.
      *
      * @param article 記事
      */

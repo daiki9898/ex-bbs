@@ -14,24 +14,29 @@
   <body>
     <div class="container">
       <!-- 記事投稿フォーム -->
-      <form
-        th:action="@{/post-article}"
-        method="post"
-        th:object="${articleForm}"
-      >
+      <form th:action="@{/post-article}" method="post">
         <div class="row">
-          <div th:errors="*{name}" class="text-danger"></div>
-          <label th:for="*{name}" class="col-auto col-form-label"
+          <div th:errors="${articleForm.name}" class="text-danger"></div>
+          <label th:for="${articleForm.name}" class="col-auto col-form-label"
             >投稿者名：</label
           >
           <div class="col-auto">
-            <input type="text" class="form-control" th:field="*{name}" />
+            <input
+              type="text"
+              class="form-control"
+              th:field="${articleForm.name}"
+            />
           </div>
         </div>
         <div>
-          <div th:errors="*{content}" class="text-danger"></div>
-          <label th:for="*{content}" class="form-label">投稿内容：</label>
-          <textarea class="form-control" th:field="*{content}"></textarea>
+          <div th:errors="${articleForm.content}" class="text-danger"></div>
+          <label th:for="${articleForm.content}" class="form-label"
+            >投稿内容：</label
+          >
+          <textarea
+            class="form-control"
+            th:field="${articleForm.content}"
+          ></textarea>
         </div>
         <button class="btn btn-secondary mt-3" type="submit">記事投稿</button>
       </form>
@@ -39,31 +44,30 @@
       <!-- 記事エリア -->
       <div
         th:each="article : ${articles}"
-        th:object="${article}"
         class="border border-primary rounded p-3 mb-3"
       >
-        <div th:text="'投稿者名：' + *{name}"></div>
+        <div th:text="'投稿者名：' + ${article.name}"></div>
         <div>投稿内容：</div>
-        <pre th:text="*{content}"></pre>
+        <pre th:text="${article.content}"></pre>
         <a
           th:href="@{/delete-article/} + *{id}"
-          class="btn btn-danger"
+          class="btn btn-danger mb-2"
           role="button"
           >記事削除</a
         >
         <!-- コメントエリア -->
         <div
-          th:each="comment : *{comments}"
-          th:object="${comment}"
-          class="border border-secondary rounded p-2 my-2"
+          th:each="comment : ${article.comments}"
+          class="border border-secondary rounded p-2 mb-2"
         >
-          <div th:text="'投稿者名：' + *{name}"></div>
+          <div th:text="'投稿者名：' + ${comment.name}"></div>
           <div>投稿内容：</div>
-          <pre th:text="*{content}"></pre>
+          <pre th:text="${comment.content}"></pre>
         </div>
         <!-- コメント投稿フォーム -->
         <form th:action="@{/post-comment}" method="post">
           <div class="row">
+            <div th:errors="${commentForm.name}" class="text-danger"></div>
             <label th:for="${commentForm.name}" class="col-auto col-form-label"
               >名前：</label
             >
@@ -76,6 +80,7 @@
             </div>
           </div>
           <div>
+            <div th:errors="${commentForm.content}" class="text-danger"></div>
             <label th:for="${commentForm.content}" class="form-label"
               >コメント：</label
             >
@@ -86,9 +91,11 @@
           </div>
           <input
             type="hidden"
-            th:filed="${commentForm.articleId}"
-            th:value="*{id}"
+            name="articleId"
+            id="articleId"
+            th:value="${article.id}"
           />
+          <div th:errors="${commentForm.articleId}" class="text-danger"></div>
           <button class="btn btn-secondary mt-3">コメント投稿</button>
         </form>
       </div>
