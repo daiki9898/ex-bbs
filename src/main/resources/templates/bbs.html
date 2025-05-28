@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>掲示板</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- 記事投稿フォーム -->
+      <form th:action="@{/post-article}" method="post">
+        <div class="row">
+          <div th:errors="${articleForm.name}" class="text-danger"></div>
+          <label th:for="${articleForm.name}" class="col-auto col-form-label"
+            >投稿者名：</label
+          >
+          <div class="col-auto">
+            <input
+              type="text"
+              class="form-control"
+              th:field="${articleForm.name}"
+            />
+          </div>
+        </div>
+        <div>
+          <div th:errors="${articleForm.content}" class="text-danger"></div>
+          <label th:for="${articleForm.content}" class="form-label"
+            >投稿内容：</label
+          >
+          <textarea
+            class="form-control"
+            th:field="${articleForm.content}"
+          ></textarea>
+        </div>
+        <button class="btn btn-secondary mt-3" type="submit">記事投稿</button>
+      </form>
+      <hr />
+      <!-- 記事エリア -->
+      <div
+        th:each="article : ${articles}"
+        class="border border-primary rounded p-3 mb-3"
+      >
+        <div th:text="'投稿者名：' + ${article.name}"></div>
+        <div>投稿内容：</div>
+        <pre th:text="${article.content}"></pre>
+        <a
+          th:href="@{/delete-article/} + ${article.id}"
+          class="btn btn-danger mb-2"
+          role="button"
+          >記事削除</a
+        >
+        <!-- コメントエリア -->
+        <div
+          th:each="comment : ${article.comments}"
+          class="border border-secondary rounded p-2 mb-2"
+        >
+          <div th:text="'投稿者名：' + ${comment.name}"></div>
+          <div>投稿内容：</div>
+          <pre th:text="${comment.content}"></pre>
+        </div>
+        <!-- コメント投稿フォーム -->
+        <form th:action="@{/post-comment}" method="post">
+          <div class="row">
+            <div th:errors="${commentForm.name}" class="text-danger"></div>
+            <label th:for="${commentForm.name}" class="col-auto col-form-label"
+              >名前：</label
+            >
+            <div class="col-auto">
+              <input
+                type="text"
+                class="form-control"
+                th:field="${commentForm.name}"
+              />
+            </div>
+          </div>
+          <div>
+            <div th:errors="${commentForm.content}" class="text-danger"></div>
+            <label th:for="${commentForm.content}" class="form-label"
+              >コメント：</label
+            >
+            <textarea
+              class="form-control"
+              th:field="${commentForm.content}"
+            ></textarea>
+          </div>
+          <input
+            type="hidden"
+            name="articleId"
+            id="articleId"
+            th:value="${article.id}"
+          />
+          <div th:errors="${commentForm.articleId}" class="text-danger"></div>
+          <button class="btn btn-secondary mt-3">コメント投稿</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- bootstrap js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
