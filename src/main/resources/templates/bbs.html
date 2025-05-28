@@ -20,7 +20,7 @@
         th:object="${articleForm}"
       >
         <div class="row">
-          <div th:errors="*{name}"></div>
+          <div th:errors="*{name}" class="text-danger"></div>
           <label th:for="*{name}" class="col-auto col-form-label"
             >投稿者名：</label
           >
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div>
-          <div th:errors="*{content}"></div>
+          <div th:errors="*{content}" class="text-danger"></div>
           <label th:for="*{content}" class="form-label">投稿内容：</label>
           <textarea class="form-control" th:field="*{content}"></textarea>
         </div>
@@ -45,37 +45,50 @@
         <div th:text="'投稿者名：' + *{name}"></div>
         <div>投稿内容：</div>
         <pre th:text="*{content}"></pre>
-        <a th:href="@{/delete-article}" class="btn btn-danger" role="button"
+        <a
+          th:href="@{/delete-article/} + *{id}"
+          class="btn btn-danger"
+          role="button"
           >記事削除</a
         >
         <!-- コメントエリア -->
         <div
           th:each="comment : *{comments}"
           th:object="${comment}"
-          class="border border-secondary rounded p-2 mb-2"
+          class="border border-secondary rounded p-2 my-2"
         >
           <div th:text="'投稿者名：' + *{name}"></div>
           <div>投稿内容：</div>
           <pre th:text="*{content}"></pre>
         </div>
         <!-- コメント投稿フォーム -->
-        <form
-          th:action="@{/post-comment}"
-          method="post"
-          th:object="${commentForm}"
-        >
+        <form th:action="@{/post-comment}" method="post">
           <div class="row">
-            <label th:for="*{name}" class="col-auto col-form-label"
+            <label th:for="${commentForm.name}" class="col-auto col-form-label"
               >名前：</label
             >
             <div class="col-auto">
-              <input type="text" class="form-control" th:field="*{name}" />
+              <input
+                type="text"
+                class="form-control"
+                th:field="${commentForm.name}"
+              />
             </div>
           </div>
           <div>
-            <label th:for="*{content}" class="form-label">コメント：</label>
-            <textarea class="form-control" th:field="*{content}"></textarea>
+            <label th:for="${commentForm.content}" class="form-label"
+              >コメント：</label
+            >
+            <textarea
+              class="form-control"
+              th:field="${commentForm.content}"
+            ></textarea>
           </div>
+          <input
+            type="hidden"
+            th:filed="${commentForm.articleId}"
+            th:value="*{id}"
+          />
           <button class="btn btn-secondary mt-3">コメント投稿</button>
         </form>
       </div>
