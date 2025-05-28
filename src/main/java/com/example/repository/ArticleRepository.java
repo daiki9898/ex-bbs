@@ -35,23 +35,28 @@ public class ArticleRepository {
             Article article = articleMap.get(rs.getInt("a_id"));
             // マップに記事が入っていない場合
             if (article == null) {
+                // 記事の作成
                 article = Article.builder()
                         .id(rs.getInt("a_id"))
                         .name(rs.getString("a_name"))
                         .content(rs.getString("a_content"))
                         .comments(new ArrayList<>())
                         .build();
-                // 新しく記事を入れる
+                // 新しく記事を入れる.
                 articleMap.put(articleId, article);
             }
-            Comment comment = Comment.builder()
-                    .id(rs.getInt("c_id"))
-                    .name(rs.getString("c_name"))
-                    .content(rs.getString("c_content"))
-                    .articleId(rs.getInt("c_article_id"))
-                    .build();
-            // 記事にコメントを追加していく.
-            article.getComments().add(comment);
+            // コメントがある場合のみ
+            if (rs.getObject("c_id") != null) {
+                // コメントの作成
+                Comment comment = Comment.builder()
+                        .id(rs.getInt("c_id"))
+                        .name(rs.getString("c_name"))
+                        .content(rs.getString("c_content"))
+                        .articleId(rs.getInt("c_article_id"))
+                        .build();
+                // 記事にコメントを追加していく.
+                article.getComments().add(comment);
+            }
         }
         // 記事をリストに詰め返す.
         return new ArrayList<>(articleMap.values());

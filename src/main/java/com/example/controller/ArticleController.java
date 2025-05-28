@@ -22,6 +22,7 @@ public class ArticleController {
 
     @GetMapping
     public String index(ArticleForm articleForm, CommentForm commentForm, Model model) {
+        articleService.findAll().forEach(System.out::println);
         model.addAttribute("articles", articleService.findAll());
         return "bbs";
     }
