@@ -34,4 +34,13 @@ public class ArticleService {
     public List<Article> findAll() {
         return articleRepository.findAll();
     }
+
+    /**
+     * 記事を削除する.
+     *
+     * @param id id
+     */
+    public void delete(Integer id) {
+        articleRepository.delete(id);
+    }
 }

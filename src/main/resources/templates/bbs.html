@@ -20,6 +20,7 @@
         th:object="${articleForm}"
       >
         <div class="row">
+          <div th:errors="*{name}"></div>
           <label th:for="*{name}" class="col-auto col-form-label"
             >投稿者名：</label
           >
@@ -28,10 +29,11 @@
           </div>
         </div>
         <div>
+          <div th:errors="*{content}"></div>
           <label th:for="*{content}" class="form-label">投稿内容：</label>
           <textarea class="form-control" th:field="*{content}"></textarea>
         </div>
-        <button class="btn btn-secondary mt-3">記事投稿</button>
+        <button class="btn btn-secondary mt-3" type="submit">記事投稿</button>
       </form>
       <hr />
       <!-- 記事エリア -->

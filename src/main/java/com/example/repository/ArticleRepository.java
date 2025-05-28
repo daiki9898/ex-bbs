@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
@@ -77,10 +78,21 @@ public class ArticleRepository {
                 SELECT a.id as a_id, a.name as a_name, a.content as a_content,
                  c.id as c_id, c.name as c_name, c.content as c_content, c.article_id as c_article_id
                  FROM articles as a
-                 INNER JOIN comments as c
+                 LEFT OUTER JOIN comments as c
                  ON a.id = c.article_id
                  ORDER BY a.id DESC, c.id DESC;
                 """;
         return template.query(sql, ARTICLE_RESULT_SET_EXTRACTOR);
+    }
+
+    /**
+     * 記事を削除する.(関連するコメントも消える)
+     *
+     * @param id id
+     */
+    public void delete(Integer id) {
+        String sql = "DELETE FROM articles WHERE id = :id";
+        SqlParameterSource param = new MapSqlParameterSource("id", id);
+        template.update(sql, param);
     }
 }
