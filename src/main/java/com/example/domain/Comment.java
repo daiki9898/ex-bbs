@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 /**
@@ -11,13 +12,22 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "comments")
 public class Comment {
     /** 主キー(id) */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     /** 名前 */
-    private String commentName;
+    private String name;
+
     /** コメント内容 */
-    private String commentContent;
-    /** 記事id(外部key参照:Article.id) */
-    private Integer articleId;
+    private String content;
+
+    /** 記事id */
+    @ManyToOne
+    @JoinColumn(name = "article_id")
+    private Article article;
 }

@@ -2,7 +2,9 @@ package com.example.service;
 
 import com.example.domain.Article;
 import com.example.repository.ArticleRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +28,18 @@ public class ArticleService {
         articleRepository.save(article);
     }
 
+    public Article findById(Integer id) {
+        return articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("id:" + id + "の記事は見つかりません"));
+    }
+
     /**
      * 記事一覧を新規順で取得する.
      *
      * @return 記事一覧
      */
     public List<Article> findAll() {
-        return articleRepository.findAll();
+        return articleRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     /**
@@ -41,6 +48,6 @@ public class ArticleService {
      * @param id id
      */
     public void delete(Integer id) {
-        articleRepository.delete(id);
+        articleRepository.deleteById(id);
     }
 }

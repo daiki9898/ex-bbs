@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -13,15 +14,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "articles")
 public class Article {
-    /** 主キー(id)
-     * (外部key:Comment.articleId)
-     * */
+    /** 主キー(id) */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     /** 投稿者名 */
-    private String articleName;
+    private String name;
+
     /** 投稿内容 */
-    private String articleContent;
+    private String content;
+
     /** コメント一覧 */
+    @OrderBy("id DESC")
+    @OneToMany(mappedBy = "article", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 }

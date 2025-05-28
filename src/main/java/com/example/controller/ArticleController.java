@@ -55,9 +55,11 @@ public class ArticleController {
         if (bindingResult.hasErrors()) {
             return index(articleForm, commentForm, model);
         }
-        Article article = new Article();
-        // フォームの中身をドメインにコピー.
-        BeanUtils.copyProperties(articleForm, article);
+        // フォームの中身をドメインに詰める.
+        Article article = Article.builder()
+                .name(articleForm.getArticleName())
+                .content(articleForm.getArticleContent())
+                .build();
         articleService.save(article);
         return "redirect:/";
     }
@@ -91,9 +93,12 @@ public class ArticleController {
             model.addAttribute("targetArticleId", commentForm.getArticleId());
             return index(articleForm, commentForm, model);
         }
-        Comment comment = new Comment();
-        // フォームの中身をドメインにコピー.
-        BeanUtils.copyProperties(commentForm, comment);
+        // フォームの中身をドメインに詰める.
+        Comment comment = Comment.builder()
+                .name(commentForm.getCommentName())
+                .content(commentForm.getCommentContent())
+                .article(articleService.findById(commentForm.getArticleId()))
+                .build();
         commentService.save(comment);
         return "redirect:/";
     }
