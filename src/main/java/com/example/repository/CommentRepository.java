@@ -26,7 +26,7 @@ public class CommentRepository {
     public void save(Comment comment) {
         String sql = """
                 INSERT INTO comments (name, content, article_id)
-                 VALUES (:name, :content, :articleId)
+                 VALUES (:commentName, :commentContent, :articleId)
                 """;
         SqlParameterSource param = new BeanPropertySqlParameterSource(comment);
         template.update(sql, param);

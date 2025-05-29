@@ -15,9 +15,9 @@ public class Comment {
     /** 主キー(id) */
     private Integer id;
     /** 名前 */
-    private String name;
-    /** コメント */
-    private String content;
+    private String commentName;
+    /** コメント内容 */
+    private String commentContent;
     /** 記事id(外部key参照:Article.id) */
     private Integer articleId;
 }
